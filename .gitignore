@@ -1,0 +1,8 @@
+node_modules
+*.local
+.DS_Store
+
+# Process artifacts: task briefs, implementer reports, review diffs and ~30 full
+# snapshots of the source tree — 17 MB that would go public on the first
+# `git add .`. `dist/` is deliberately NOT ignored; it is committed.
+.superpowers/

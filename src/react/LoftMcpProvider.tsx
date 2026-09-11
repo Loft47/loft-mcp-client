@@ -1,0 +1,183 @@
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
+import { AuthExpiredError } from '../errors.js'
+import { LoftMcpContext } from './useLoftMcp.js'
+import type { LoftMcpStatus, LoftMcpValue } from './useLoftMcp.js'
+import type { LoftMcpClient } from '../client.js'
+import type { BrokerageChoice } from '../brokerage.js'
+
+const message = (error: unknown) => (error instanceof Error ? error.message : String(error))
+
+export interface LoftMcpProviderProps {
+  /**
+   * Create this once at module scope, not in a component body: StrictMode
+   * double-invokes renders, which would register two OAuth clients and arm two
+   * renewal timers.
+   */
+  client: LoftMcpClient
+  /** Skip the picker when the account can reach exactly one brokerage. */
+  autoSelectSingle?: boolean
+  children: React.ReactNode
+}
+
+export function LoftMcpProvider({
+  client,
+  autoSelectSingle = true,
+  children,
+}: LoftMcpProviderProps) {
+  // The client is mutable and notifies on change; a version bump re-reads it.
+  const [, bump] = useReducer((n: number) => n + 1, 0)
+  useEffect(() => client.subscribe(bump), [client])
+
+  const [error, setError] = useState<string | null>(null)
+  const [exchanging, setExchanging] = useState(false)
+  const [brokerages, setBrokerages] = useState<BrokerageChoice[] | null>(null)
+  const exchangedCode = useRef<string | null>(null)
+
+  // ── Complete the OAuth redirect ───────────────────────────────────────────
+  useEffect(() => {
+    if (!client.environment || client.isAuthenticated || error) return
+
+    const code = new URLSearchParams(window.location.search).get('code')
+    if (!code || exchangedCode.current === code) return
+    exchangedCode.current = code
+
+    let cancelled = false
+    setExchanging(true)
+    client
+      .completeSignIn(code)
+      .then(() => {
+        if (cancelled) return
+        window.history.replaceState({}, '', window.location.pathname)
+      })
+      .catch((err) => {
+        if (cancelled) return
+        setError(message(err))
+      })
+      .finally(() => {
+        if (cancelled) return
+        setExchanging(false)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [client, error])
+
+  // `client.isAuthenticated` / `client.identity` are live getters, not React
+  // state: a subscribe-triggered re-render (e.g. a direct `completeSignIn()`
+  // call that bypasses the effect above) changes what these read without
+  // changing `client`, `error` or `exchanging` themselves. Recomputing this
+  // plain boolean every render and depending on *it* — the same trick
+  // `needsBrokerage` below uses — is what lets the effect notice the
+  // transition instead of skipping it because its own deps look unchanged.
+  const needsIdentity = client.isAuthenticated && !client.identity && !exchanging && !error
+
+  // ── Resolve who is signed in ──────────────────────────────────────────────
+  useEffect(() => {
+    if (!needsIdentity) return
+    let cancelled = false
+
+    client.loadIdentity().catch((err) => {
+      if (cancelled) return
+      // The client has already dropped the credentials and notified; falling
+      // back to the connect screen beats stranding a token we cannot identify.
+      if (err instanceof AuthExpiredError) return
+      setError(message(err))
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [client, needsIdentity])
+
+  const needsBrokerage =
+    Boolean(client.identity) && client.brokerageId === null && !error
+
+  // ── Load the brokerage choices ────────────────────────────────────────────
+  useEffect(() => {
+    if (!needsBrokerage || brokerages) return
+    let cancelled = false
+
+    client
+      .brokerageChoices()
+      .then((rows) => {
+        if (cancelled) return
+        setBrokerages(rows)
+        if (autoSelectSingle && rows.length === 1) client.setBrokerage(rows[0]!.id)
+      })
+      .catch((err) => {
+        if (cancelled) return
+        if (err instanceof AuthExpiredError) return
+        setError(message(err))
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [client, needsBrokerage, brokerages, autoSelectSingle])
+
+  const status: LoftMcpStatus = error
+    ? 'error'
+    : !client.environment
+      ? 'choose-environment'
+      : exchanging
+        ? 'connecting'
+        : !client.isAuthenticated
+          ? 'connect'
+          : !client.identity
+            ? 'identifying'
+            : client.brokerageId === null
+              ? 'choose-brokerage'
+              : 'ready'
+
+  const retry = useCallback(() => {
+    exchangedCode.current = null
+    setError(null)
+  }, [])
+
+  // Leaves this environment's credentials in place. Keys are namespaced per
+  // environment, so nothing leaks, and coming back does not mean signing in
+  // again. Use `revoke` for that.
+  const switchEnvironment = useCallback(() => {
+    setBrokerages(null)
+    setError(null)
+    client.clearEnvironment()
+  }, [client])
+
+  const switchBrokerage = useCallback(() => {
+    setBrokerages(null)
+    client.clearBrokerage()
+  }, [client])
+
+  const value = useMemo<LoftMcpValue>(
+    () => ({
+      client,
+      status,
+      error,
+      environments: client.environments,
+      environment: client.environment,
+      setEnvironment: (id) => {
+        setBrokerages(null)
+        setError(null)
+        client.setEnvironment(id)
+      },
+      switchEnvironment,
+      signIn: () => client.signIn(),
+      identity: client.identity,
+      brokerageId: client.brokerageId,
+      brokerages,
+      chooseBrokerage: (id) => client.setBrokerage(id),
+      switchBrokerage,
+      revoke: (opts) => {
+        setBrokerages(null)
+        setError(null)
+        client.revoke(opts)
+      },
+      retry,
+      call: client.call,
+    }),
+    [client, status, error, brokerages, retry, switchEnvironment, switchBrokerage],
+  )
+
+  return <LoftMcpContext.Provider value={value}>{children}</LoftMcpContext.Provider>
+}
