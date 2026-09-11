@@ -21,6 +21,155 @@ wrappers.
 
 No runtime dependencies. React is an optional peer.
 
+## Build one by asking
+
+You do not have to write the wiring yourself. Point Claude at this repo and
+describe the tool your brokerage actually needs:
+
+> Use https://github.com/Loft47/loft-mcp-client to create a new standalone
+> React + Vite app that …
+
+### Two that already exist
+
+Both run on this client, and both are worth reading before you prompt.
+
+| App | What it does |
+| --- | --- |
+| [`Loft47/audit-commission`](https://github.com/Loft47/audit-commission) | Read-only pre-payout audit. Runs a configurable rule set over a payout cycle — gross commission that does not match the plan rate, payout components that do not sum to the total, deals closed and commissionable with nothing paid, a referral source recorded with no referral fee carved out — and keeps an attributable trail of who cleared what and why. |
+| [`Loft47/comply-dashboard`](https://github.com/Loft47/comply-dashboard) | Live compliance board. Deal status, outstanding requirements, FINTRAC client risk scoring and the deals that need a managing broker's review. |
+
+### Prompts worth stealing
+
+One paste into Claude each. Say which environment to start in — `staging`,
+always, until you trust it.
+
+#### Money, commissions and payouts
+
+**💵 Commission & deduction detective**
+
+> Use https://github.com/Loft47/loft-mcp-client to build a standalone app that
+> explains any agent's payout. Take a deal and an agent, then walk the whole
+> chain — gross commission, the split that applied, every deduction and cap
+> contribution, tax, advances recovered — and show me line by line why the
+> number came out the way it did. I need to answer "why is my cheque short"
+> without opening five screens.
+
+**💰 Payout readiness**
+
+> Use https://github.com/Loft47/loft-mcp-client to build a standalone app that
+> answers one question per agent: ready for payout, or not. Check commissions
+> calculated, deductions applied, advances outstanding, requirements satisfied
+> and trust balances sufficient. Show a Ready / Not Ready badge with the
+> specific blockers listed underneath, and let me sort by amount waiting.
+
+**🧾 Agent receivables aging**
+
+> Use https://github.com/Loft47/loft-mcp-client to build a standalone app that
+> ages unpaid agent deductions into 0–30 / 31–60 / 61–90 / 90+ buckets, totals
+> per agent, and flags anyone whose balance is larger than the commission left
+> on their unclosed deals.
+
+**📆 Commission cash-flow forecast**
+
+> Use https://github.com/Loft47/loft-mcp-client to build a standalone app that
+> forecasts brokerage income by month — firm-but-unclosed deals bucketed by
+> expected close date, with a running 90-day total against the last three
+> months actual.
+
+#### Compliance and deal flow
+
+**🛡️ FINTRAC risk detective**
+
+> Use https://github.com/Loft47/loft-mcp-client to build a standalone app that
+> surfaces FINTRAC exposure. Missing identification requirements, Receipt of
+> Funds not on file, transactions that score high risk — ranked by how close the
+> deal is to closing, with an alert list for the managing broker.
+
+**🤖 Convey OP copilot**
+
+> Use https://github.com/Loft47/loft-mcp-client to build a standalone app that
+> moves deals toward Convey Ready and Ready for Payout. Show the outstanding
+> requirements per deal, who owns each one, how long it has been sitting, and
+> draft the follow-up email to the agent so I only have to press send.
+
+**📋 Deal file completeness**
+
+> Use https://github.com/Loft47/loft-mcp-client to build a standalone app that
+> shows, for every deal closing in the next 30 days, which requirements are
+> still outstanding. Group by agent, show days to close, and let me mark a deal
+> as chased so I know who I have already emailed.
+
+**💧 Missing deposits and trust shortfalls**
+
+> Use https://github.com/Loft47/loft-mcp-client to build a standalone app that
+> lists every deal where the money is not where it should be — a firm deal with
+> a deposit still outstanding, a trust balance that does not cover what is owed
+> out of it, a closed deal with a payout remaining. Worst first, deep-linked
+> back into Loft47.
+
+#### Growth, people and operations
+
+**📈 Referral and lead intelligence**
+
+> Use https://github.com/Loft47/loft-mcp-client to build a standalone app that
+> shows where our business actually comes from. Break deal count and GCI down by
+> lead source, referral partner, tag, agent and office, compare against the same
+> period last year, and tell me which sources are growing and which are dead.
+
+**🏆 Agent production leaderboard**
+
+> Use https://github.com/Loft47/loft-mcp-client to build a standalone app that
+> ranks agents by year-to-date production — deal count, gross commission,
+> brokerage net, average sale price — switchable between closed and firm,
+> filterable by office and team, and exportable.
+
+**👋 Recruiting and retention watch**
+
+> Use https://github.com/Loft47/loft-mcp-client to build a standalone app that
+> shows me agents who have gone quiet — no new deal written in 60, 90 or 180
+> days — next to their production over the same period last year, so I can see
+> who is slipping before they leave.
+
+**📇 Agent roster export**
+
+> Use https://github.com/Loft47/loft-mcp-client to build a standalone app that
+> exports our agent roster to CSV — name, email, phone, office, team, status,
+> start date — filterable to active only and by office, with a column layout I
+> can save. For board dues, E&O renewal and reconciling the MLS roster.
+
+**🤝 Co-op and outside brokerage reconciliation**
+
+> Use https://github.com/Loft47/loft-mcp-client to build a standalone app that
+> lists every deal with an outside brokerage on it: the co-op side, what we owe
+> or are owed, whether the external payout has been transacted, and anything
+> outstanding more than 14 days past close.
+
+### What to expect
+
+Claude installs the client, sets up the dev proxy, renders the seven gates and
+writes the tool wrappers. What is left is the part only you know — your rules.
+
+Two things to be honest with yourself about before prompting:
+
+**The tool set is whatever your MCP server exposes.** The two sample apps use a
+read-only subset — `ListDeals`, `GetDealFinancials`, `ListDealPayouts`,
+`ListDealRequirements`, `ListProfiles`, `ListTeams`, `ListCommissions`,
+`ListAllocations`, `ListDealAccessDeductions`, `ListDeductionTemplates`,
+`GetBrokerage`. Anything above that leans on accounting, support tickets or
+setup data needs tools this client cannot invent; `call` reaches whatever is
+there, and nothing more. Ask Claude to confirm the tools exist before it builds
+a screen around them.
+
+**Anything that fixes, relinks, re-runs or sends needs a write tool.** Where
+there is none, the honest version of that app is one that finds the problem,
+explains it and hands you the link. That is still most of the value.
+
+Otherwise: a browser client, so no server to stand up and no database. Sign-in
+is OAuth against your real account, so an app only ever sees the brokerages you
+could already reach.
+
+Start on `staging`. The environment picker is the first gate for a reason.
+
 ## Install
 
 ```bash
