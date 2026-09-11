@@ -331,6 +331,35 @@ describe('the OAuth callback', () => {
   // re-run this effect body with the same `code` still in the URL — the same
   // shape as two mounts racing to exchange it. Only the `exchangedCode` ref
   // stops that second run from calling `completeSignIn` again.
+  it('leaves the connecting state under StrictMode, not just exchanging once', async () => {
+    // Regression: the dedup latch made StrictMode's second mount pass return
+    // early, while its cleanup had already set the first pass's `cancelled`
+    // flag — so `setExchanging(false)` never ran and the app sat on the
+    // "connecting" screen forever, despite the token exchange succeeding.
+    net.on('/mcp', (call) =>
+      JSON.parse(call.body!).params?.name === 'GetUserinfo'
+        ? userinfo
+        : ok({ data: [brokerageRow(45, 'Acme')] }),
+    )
+    client.setEnvironment('staging')
+    await client.signIn()
+    window.history.replaceState({}, '', '/?code=the-code')
+
+    render(
+      <StrictMode>
+        <LoftMcpProvider client={client}>
+          <Probe />
+        </LoftMcpProvider>
+      </StrictMode>,
+    )
+
+    await waitFor(() => expect(client.isAuthenticated).toBe(true))
+    await waitFor(() => expect(status()).not.toBe('connecting'))
+    expect(net.callsTo('/oauth/token')).toHaveLength(1)
+    // The spent code must also be scrubbed from the URL.
+    await waitFor(() => expect(window.location.search).toBe(''))
+  })
+
   it('exchanges only once under StrictMode double-invocation', async () => {
     net.on('/mcp', userinfo)
     client.setEnvironment('staging')

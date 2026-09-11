@@ -1,6 +1,6 @@
 {
   "name": "loft-mcp-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Headless browser client for the Loft47 MCP server: OAuth PKCE, environment selection, transport, identity and token renewal.",
   "license": "MIT",
   "type": "module",

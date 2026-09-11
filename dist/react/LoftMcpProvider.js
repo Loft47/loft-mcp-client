@@ -10,20 +10,31 @@ export function LoftMcpProvider({ client, autoSelectSingle = true, children, }) 
     const [error, setError] = useState(null);
     const [exchanging, setExchanging] = useState(false);
     const [brokerages, setBrokerages] = useState(null);
-    const exchangedCode = useRef(null);
+    const exchange = useRef(null);
     // ── Complete the OAuth redirect ───────────────────────────────────────────
     useEffect(() => {
         if (!client.environment || client.isAuthenticated || error)
             return;
         const code = new URLSearchParams(window.location.search).get('code');
-        if (!code || exchangedCode.current === code)
+        if (!code)
             return;
-        exchangedCode.current = code;
+        // An authorization code is single-use, so the exchange must start at most
+        // once. But StrictMode tears this effect down and remounts it while the
+        // first request is still open, and a boolean "already did this" latch locks
+        // the second pass out of its own completion: the first pass is cancelled,
+        // the second never starts, and nothing ever clears `exchanging`. Memoising
+        // the promise instead lets the remount re-subscribe to the in-flight
+        // exchange rather than re-issuing it.
+        if (exchange.current?.code !== code) {
+            exchange.current = { code, settled: client.completeSignIn(code) };
+        }
         let cancelled = false;
         setExchanging(true);
-        client
-            .completeSignIn(code)
+        exchange.current.settled
             .then(() => {
+            // Still guarded, so a genuinely unmounted provider never writes
+            // history. A StrictMode remount is not that case: it re-subscribes
+            // above, so the live pass scrubs the spent code.
             if (cancelled)
                 return;
             window.history.replaceState({}, '', window.location.pathname);
@@ -108,7 +119,7 @@ export function LoftMcpProvider({ client, autoSelectSingle = true, children, }) 
                             ? 'choose-brokerage'
                             : 'ready';
     const retry = useCallback(() => {
-        exchangedCode.current = null;
+        exchange.current = null;
         setError(null);
     }, []);
     // Leaves this environment's credentials in place. Keys are namespaced per
