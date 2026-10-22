@@ -28,8 +28,7 @@ describe the tool your brokerage actually needs.
 
 The whole prompt:
 
-> Use https://github.com/Loft47/loft-mcp-client and follow
-> https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
+> Use https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
 > exactly. If you cannot open that file, stop and tell me. Then build a
 > standalone app that …
 
@@ -55,8 +54,7 @@ always, until you trust it.
 
 **💵 Commission & deduction detective**
 
-> Use https://github.com/Loft47/loft-mcp-client and follow
-> https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
+> Use https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
 > exactly. If you cannot open that file, stop and tell me. Then build a
 > standalone app that 
 > explains any agent's payout. Take a deal and an agent, then walk the whole
@@ -71,8 +69,7 @@ always, until you trust it.
 
 **💰 Payout readiness**
 
-> Use https://github.com/Loft47/loft-mcp-client and follow
-> https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
+> Use https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
 > exactly. If you cannot open that file, stop and tell me. Then build a
 > standalone app that 
 > answers one question per agent: ready for payout, or not. Check commissions
@@ -82,8 +79,7 @@ always, until you trust it.
 
 **🧾 Agent receivables aging**
 
-> Use https://github.com/Loft47/loft-mcp-client and follow
-> https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
+> Use https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
 > exactly. If you cannot open that file, stop and tell me. Then build a
 > standalone app that 
 > ages unpaid agent deductions into 0–30 / 31–60 / 61–90 / 90+ buckets, totals
@@ -92,8 +88,7 @@ always, until you trust it.
 
 **📆 Commission cash-flow forecast**
 
-> Use https://github.com/Loft47/loft-mcp-client and follow
-> https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
+> Use https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
 > exactly. If you cannot open that file, stop and tell me. Then build a
 > standalone app that 
 > forecasts brokerage income by month — firm-but-unclosed deals bucketed by
@@ -102,8 +97,7 @@ always, until you trust it.
 
 **🏦 Payouts stuck on an archived bank account**
 
-> Use https://github.com/Loft47/loft-mcp-client and follow
-> https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
+> Use https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
 > exactly. If you cannot open that file, stop and tell me. Then build a
 > standalone app that 
 > finds pending payouts still tied to an archived bank account after a
@@ -123,8 +117,7 @@ always, until you trust it.
 
 **📉 Brokerage income deduction analysis**
 
-> Use https://github.com/Loft47/loft-mcp-client and follow
-> https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
+> Use https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
 > exactly. If you cannot open that file, stop and tell me. Then build a
 > standalone app that 
 > breaks down income deductions — deductions where `deductionType` is income —
@@ -138,8 +131,7 @@ always, until you trust it.
 
 **🛡️ FINTRAC risk detective**
 
-> Use https://github.com/Loft47/loft-mcp-client and follow
-> https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
+> Use https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
 > exactly. If you cannot open that file, stop and tell me. Then build a
 > standalone app that 
 > surfaces FINTRAC exposure. Missing identification requirements, Receipt of
@@ -148,8 +140,7 @@ always, until you trust it.
 
 **🤖 Convey OP copilot**
 
-> Use https://github.com/Loft47/loft-mcp-client and follow
-> https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
+> Use https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
 > exactly. If you cannot open that file, stop and tell me. Then build a
 > standalone app that 
 > moves deals toward Convey Ready and Ready for Payout. Show the outstanding
@@ -158,8 +149,7 @@ always, until you trust it.
 
 **📋 Deal file completeness**
 
-> Use https://github.com/Loft47/loft-mcp-client and follow
-> https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
+> Use https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
 > exactly. If you cannot open that file, stop and tell me. Then build a
 > standalone app that 
 > shows, for every deal closing in the next 30 days, which requirements are
@@ -168,8 +158,7 @@ always, until you trust it.
 
 **💧 Missing deposits and trust shortfalls**
 
-> Use https://github.com/Loft47/loft-mcp-client and follow
-> https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
+> Use https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
 > exactly. If you cannot open that file, stop and tell me. Then build a
 > standalone app that 
 > lists every deal where the money is not where it should be — a firm deal with
@@ -179,8 +168,7 @@ always, until you trust it.
 
 **🏷️ Closed deals by title company**
 
-> Use https://github.com/Loft47/loft-mcp-client and follow
-> https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
+> Use https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
 > exactly. If you cannot open that file, stop and tell me. Then build a
 > standalone app that 
 > groups closed deals between two dates by title company, then by agent,
@@ -192,8 +180,7 @@ always, until you trust it.
 
 **📈 Referral and lead intelligence**
 
-> Use https://github.com/Loft47/loft-mcp-client and follow
-> https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
+> Use https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
 > exactly. If you cannot open that file, stop and tell me. Then build a
 > standalone app that 
 > shows where our business actually comes from. Break deal count and GCI down by
@@ -202,8 +189,7 @@ always, until you trust it.
 
 **🏆 Agent production leaderboard**
 
-> Use https://github.com/Loft47/loft-mcp-client and follow
-> https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
+> Use https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
 > exactly. If you cannot open that file, stop and tell me. Then build a
 > standalone app that 
 > ranks agents by year-to-date production — deal count, Gross Commission Income
@@ -216,8 +202,7 @@ always, until you trust it.
 
 **👋 Recruiting and retention watch**
 
-> Use https://github.com/Loft47/loft-mcp-client and follow
-> https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
+> Use https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
 > exactly. If you cannot open that file, stop and tell me. Then build a
 > standalone app that 
 > shows me agents who have gone quiet — no new deal written in 60, 90 or 180
@@ -226,8 +211,7 @@ always, until you trust it.
 
 **📇 Agent roster export**
 
-> Use https://github.com/Loft47/loft-mcp-client and follow
-> https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
+> Use https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
 > exactly. If you cannot open that file, stop and tell me. Then build a
 > standalone app that 
 > exports our agent roster to CSV — name, email, phone, office, team, status,
@@ -236,8 +220,7 @@ always, until you trust it.
 
 **👯 Duplicate profile check before a merge**
 
-> Use https://github.com/Loft47/loft-mcp-client and follow
-> https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
+> Use https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
 > exactly. If you cannot open that file, stop and tell me. Then build a
 > standalone app that 
 > takes two profile IDs I believe are the same person and pulls the full deal
@@ -247,8 +230,7 @@ always, until you trust it.
 
 **🤝 Co-op and outside brokerage reconciliation**
 
-> Use https://github.com/Loft47/loft-mcp-client and follow
-> https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
+> Use https://github.com/Loft47/loft-mcp-client/blob/main/build-guide.md
 > exactly. If you cannot open that file, stop and tell me. Then build a
 > standalone app that 
 > lists every deal with an outside brokerage on it: the co-op side, what we owe
@@ -284,7 +266,7 @@ Start on `staging`. The environment picker is the first gate for a reason.
 ## Install
 
 ```bash
-npm install github:Loft47/loft-mcp-client#v0.1.0
+npm install github:Loft47/loft-mcp-client#v0.1.1
 ```
 
 npm pins a git dependency to a commit SHA in `package-lock.json`, so installs
