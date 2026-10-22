@@ -52,7 +52,11 @@ always, until you trust it.
 > chain — gross commission, the split that applied, every deduction and cap
 > contribution, tax, advances recovered — and show me line by line why the
 > number came out the way it did. I need to answer "why is my cheque short"
-> without opening five screens.
+> without opening five screens. Above the deal view, show the agent's earnings
+> month-to-date and year-to-date — every commission payout transacted to them,
+> using transactedAt as the date field — with total gross commission, total
+> deductions and net paid out for each period, and let me click through from a
+> period to the deals behind it. Exclude voided and collapsed deals.
 
 **💰 Payout readiness**
 
@@ -75,6 +79,34 @@ always, until you trust it.
 > forecasts brokerage income by month — firm-but-unclosed deals bucketed by
 > expected close date, with a running 90-day total against the last three
 > months actual.
+
+**🏦 Payouts stuck on an archived bank account**
+
+> Use https://github.com/Loft47/loft-mcp-client to build a standalone app that
+> finds pending payouts still tied to an archived bank account after a
+> brokerage switches banks. The mapping is stamped on the payout when the deal
+> is created, so fixing Payload, Xero or QBO does not repair existing payouts.
+> Let me pick the archived and the active account by their real IDs — take them
+> from `bankAccountMapping.id` on a known payout via `ListDealPayouts`, since
+> `ListBankAccounts` can come back empty and the GL number is not the ID. Sweep
+> every conditional, firm and closed deal with `ListDeals` filtered by
+> `filter_financials_payout_remaining=0.01,9999999`, ignore small negative
+> admin-fee residuals, then check each deal's payouts. List unpaid payouts on
+> the archived account as live risks and already-paid ones as reconciliation
+> only: deal number, full deal number, payee, payout ID, amount and status.
+> Offer a fix through `UpdateDealPayout` that remaps a pending payout to the
+> active account, only after I confirm each one, then re-run the sweep to prove
+> nothing is left.
+
+**📉 Brokerage income deduction analysis**
+
+> Use https://github.com/Loft47/loft-mcp-client to build a standalone app that
+> breaks down income deductions — deductions where `deductionType` is income —
+> by agent and by deduction template name, using closedAt as the date field
+> over a date range I choose. Compare each total against either the
+> same-length period immediately before or the same period last year (my
+> pick), showing the dollar change and % change per agent and per deduction
+> type. Exclude voided and collapsed deals.
 
 #### Compliance and deal flow
 
@@ -107,6 +139,14 @@ always, until you trust it.
 > out of it, a closed deal with a payout remaining. Worst first, deep-linked
 > back into Loft47.
 
+**🏷️ Closed deals by title company**
+
+> Use https://github.com/Loft47/loft-mcp-client to build a standalone app that
+> groups closed deals between two dates by title company, then by agent,
+> showing the deal count and total sales volume for each group. Use closedAt as
+> the date field, exclude voided and collapsed deals, and let me expand a
+> group to see the deals behind it.
+
 #### Growth, people and operations
 
 **📈 Referral and lead intelligence**
@@ -119,9 +159,13 @@ always, until you trust it.
 **🏆 Agent production leaderboard**
 
 > Use https://github.com/Loft47/loft-mcp-client to build a standalone app that
-> ranks agents by year-to-date production — deal count, gross commission,
-> brokerage net, average sale price — switchable between closed and firm,
-> filterable by office and team, and exportable.
+> ranks agents by year-to-date production — deal count, Gross Commission Income
+> (GCI, total commission before deductions), brokerage net, average sale price —
+> switchable between closed and firm, filterable by office and team, and
+> exportable. Use closedAt as the date field and exclude voided and collapsed
+> deals. Add a year-over-year view: each agent's GCI from Jan 1 through today
+> against the same period last year, with the dollar change and % change,
+> sortable by % change so I can see who is growing and who is slipping.
 
 **👋 Recruiting and retention watch**
 
@@ -136,6 +180,14 @@ always, until you trust it.
 > exports our agent roster to CSV — name, email, phone, office, team, status,
 > start date — filterable to active only and by office, with a column layout I
 > can save. For board dues, E&O renewal and reconciling the MLS roster.
+
+**👯 Duplicate profile check before a merge**
+
+> Use https://github.com/Loft47/loft-mcp-client to build a standalone app that
+> takes two profile IDs I believe are the same person and pulls the full deal
+> list for each — every page, not just the first. Show which deals appear on
+> both, with deal number, property address, sale status, buyer and seller
+> names, and a link to each deal, so I know what a merge will touch.
 
 **🤝 Co-op and outside brokerage reconciliation**
 
