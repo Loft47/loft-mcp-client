@@ -7,19 +7,18 @@ the agent carry the rest.
 
 ## The short prompt
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a **prototype in this chat** / **local app on my computer**
-> (pick one). It should …
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that …
 
 For example:
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat. It should export our agent roster to
-> CSV — name, email, phone, office, team, status, start date — filterable to
-> active only and by office, with a column layout I can save. For board dues,
-> E&O renewal and reconciling the MLS roster.
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that exports our
+> agent roster to CSV — name, email, phone, office, team, status, start date —
+> filterable to active only and by office, with a column layout I can save.
+
+The person may add "as a prototype in this chat" or "as a local app on my
+computer". If they do not, ask (see below).
 
 ## Reading this guide and the README
 
@@ -136,6 +135,19 @@ Ask at most two or three questions at a time, in plain language:
 
 Confirm the required tools and fields exist before designing screens.
 
+## Defaults every app follows
+
+Apply these unless the prompt says otherwise. Prompts are kept short and do not
+repeat them.
+
+- Exclude voided and collapsed deals.
+- Dates: `closedAt` for closed deals and production; `transactedAt` for
+  payouts paid out.
+- GCI means Gross Commission Income: total commission before deductions.
+- Fetch every page of every list, never just the first.
+- Every table can be sorted, and exported to CSV exactly as shown.
+- Every deal links back to Loft47.
+
 ## Mode A: Browser prototype
 
 Build it directly in the chat. Do not clone, install or run anything.
@@ -241,3 +253,24 @@ Local app:
 - The requested data appears with filters and saved settings.
 - The export matches what is on screen.
 - The person can use it again without you.
+
+## Known gotchas
+
+### Payouts tied to an archived bank account
+
+- The bank account mapping is stamped on each payout when the deal is created,
+  so fixing Payload, Xero or QBO does not repair existing payouts.
+- Take the account IDs from `bankAccountMapping.id` on a known payout via
+  `ListDealPayouts`. `ListBankAccounts` can come back empty, and the GL number
+  is not the ID. Let the person pick the archived and the active account from
+  those real IDs.
+- Sweep every conditional, firm and closed deal with `ListDeals` filtered by
+  `filter_financials_payout_remaining=0.01,9999999`, then check each deal's
+  payouts. Ignore small negative admin-fee residuals.
+- List unpaid payouts on the archived account as live risks and already-paid
+  ones as reconciliation only: deal number, full deal number, payee, payout ID,
+  amount and status.
+- Remap with `UpdateDealPayout`, pending payouts only, one at a time after the
+  person confirms each. A browser prototype cannot write, so make those calls
+  yourself through your connector. Re-run the sweep afterwards to prove
+  nothing is left.

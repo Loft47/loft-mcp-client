@@ -30,15 +30,15 @@ access or local setup is needed to start.
 
 The whole prompt:
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat or as a local app on my computer (ask
-> me which) — an app that …
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that …
 
 The guide carries the rules every app needs: choosing a prototype in the chat
 or a local app, asking staging or production, sign-in states, the dev proxy,
 confirming tools and fields before building, saved settings and the handover.
-Only the description of the app changes.
+Only the description of the app changes. The agent asks whether you want a
+prototype in the chat or a local app; add "as a prototype in this chat" or "as
+a local app on my computer" to skip the question.
 
 ### Two that already exist
 
@@ -58,26 +58,21 @@ or `production`; we recommend `staging` until you trust the app.
 
 **💵 Commission & deduction detective**
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat or as a local app on my computer (ask
-> me which) — an app that 
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that
 > explains any agent's payout. Take a deal and an agent, then walk the whole
 > chain — gross commission, the split that applied, every deduction and cap
 > contribution, tax, advances recovered — and show me line by line why the
 > number came out the way it did. I need to answer "why is my cheque short"
 > without opening five screens. Above the deal view, show the agent's earnings
-> month-to-date and year-to-date — every commission payout transacted to them,
-> using transactedAt as the date field — with total gross commission, total
-> deductions and net paid out for each period, and let me click through from a
-> period to the deals behind it. Exclude voided and collapsed deals.
+> month-to-date and year-to-date — every commission payout transacted to them —
+> with total gross commission, total deductions and net paid out for each
+> period, and let me click through from a period to the deals behind it.
 
 **💰 Payout readiness**
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat or as a local app on my computer (ask
-> me which) — an app that 
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that
 > answers one question per agent: ready for payout, or not. Check commissions
 > calculated, deductions applied, advances outstanding, requirements satisfied
 > and trust balances sufficient. Show a Ready / Not Ready badge with the
@@ -85,175 +80,131 @@ or `production`; we recommend `staging` until you trust the app.
 
 **🧾 Agent receivables aging**
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat or as a local app on my computer (ask
-> me which) — an app that 
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that
 > ages unpaid agent deductions into 0–30 / 31–60 / 61–90 / 90+ buckets, totals
 > per agent, and flags anyone whose balance is larger than the commission left
 > on their unclosed deals.
 
 **📆 Commission cash-flow forecast**
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat or as a local app on my computer (ask
-> me which) — an app that 
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that
 > forecasts brokerage income by month — firm-but-unclosed deals bucketed by
 > expected close date, with a running 90-day total against the last three
 > months actual.
 
 **🏦 Payouts stuck on an archived bank account**
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat or as a local app on my computer (ask
-> me which) — an app that 
-> finds pending payouts still tied to an archived bank account after a
-> brokerage switches banks. The mapping is stamped on the payout when the deal
-> is created, so fixing Payload, Xero or QBO does not repair existing payouts.
-> Let me pick the archived and the active account by their real IDs — take them
-> from `bankAccountMapping.id` on a known payout via `ListDealPayouts`, since
-> `ListBankAccounts` can come back empty and the GL number is not the ID. Sweep
-> every conditional, firm and closed deal with `ListDeals` filtered by
-> `filter_financials_payout_remaining=0.01,9999999`, ignore small negative
-> admin-fee residuals, then check each deal's payouts. List unpaid payouts on
-> the archived account as live risks and already-paid ones as reconciliation
-> only: deal number, full deal number, payee, payout ID, amount and status.
-> Offer a fix through `UpdateDealPayout` that remaps a pending payout to the
-> active account, only after I confirm each one, then re-run the sweep to prove
-> nothing is left.
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that
+> finds pending payouts still tied to an archived bank account after we
+> switched banks, and offers to remap each one to the active account — only
+> after I confirm each.
 
 **📉 Brokerage income deduction analysis**
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat or as a local app on my computer (ask
-> me which) — an app that 
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that
 > breaks down income deductions — deductions where `deductionType` is income —
-> by agent and by deduction template name, using closedAt as the date field
-> over a date range I choose. Compare each total against either the
-> same-length period immediately before or the same period last year (my
-> pick), showing the dollar change and % change per agent and per deduction
-> type. Exclude voided and collapsed deals.
+> by agent and by deduction template name over a date range I choose. Compare
+> each total against either the same-length period immediately before or the
+> same period last year (my pick), showing the dollar change and % change per
+> agent and per deduction type.
 
 #### Compliance and deal flow
 
 **🛡️ FINTRAC risk detective**
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat or as a local app on my computer (ask
-> me which) — an app that 
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that
 > surfaces FINTRAC exposure. Missing identification requirements, Receipt of
-> Funds not on file, transactions that score high risk — ranked by how close the
-> deal is to closing, with an alert list for the managing broker.
+> Funds not on file, transactions that score high risk — ranked by how close
+> the deal is to closing, with an alert list for the managing broker.
 
 **🤖 Convey OP copilot**
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat or as a local app on my computer (ask
-> me which) — an app that 
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that
 > moves deals toward Convey Ready and Ready for Payout. Show the outstanding
 > requirements per deal, who owns each one, how long it has been sitting, and
 > draft the follow-up email to the agent so I only have to press send.
 
 **📋 Deal file completeness**
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat or as a local app on my computer (ask
-> me which) — an app that 
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that
 > shows, for every deal closing in the next 30 days, which requirements are
 > still outstanding. Group by agent, show days to close, and let me mark a deal
 > as chased so I know who I have already emailed.
 
 **💧 Missing deposits and trust shortfalls**
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat or as a local app on my computer (ask
-> me which) — an app that 
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that
 > lists every deal where the money is not where it should be — a firm deal with
 > a deposit still outstanding, a trust balance that does not cover what is owed
-> out of it, a closed deal with a payout remaining. Worst first, deep-linked
-> back into Loft47.
+> out of it, a closed deal with a payout remaining. Worst first.
 
 **🏷️ Closed deals by title company**
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat or as a local app on my computer (ask
-> me which) — an app that 
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that
 > groups closed deals between two dates by title company, then by agent,
-> showing the deal count and total sales volume for each group. Use closedAt as
-> the date field, exclude voided and collapsed deals, and let me expand a
+> showing the deal count and total sales volume for each group. Let me expand a
 > group to see the deals behind it.
 
 #### Growth, people and operations
 
 **📈 Referral and lead intelligence**
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat or as a local app on my computer (ask
-> me which) — an app that 
-> shows where our business actually comes from. Break deal count and GCI down by
-> lead source, referral partner, tag, agent and office, compare against the same
-> period last year, and tell me which sources are growing and which are dead.
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that
+> shows where our business actually comes from. Break deal count and GCI down
+> by lead source, referral partner, tag, agent and office, compare against the
+> same period last year, and tell me which sources are growing and which are
+> dead.
 
 **🏆 Agent production leaderboard**
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat or as a local app on my computer (ask
-> me which) — an app that 
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that
 > ranks agents by year-to-date production — deal count, Gross Commission Income
-> (GCI, total commission before deductions), brokerage net, average sale price —
-> switchable between closed and firm, filterable by office and team, and
-> exportable. Use closedAt as the date field and exclude voided and collapsed
-> deals. Add a year-over-year view: each agent's GCI from Jan 1 through today
-> against the same period last year, with the dollar change and % change,
-> sortable by % change so I can see who is growing and who is slipping.
+> (GCI), brokerage net, average sale price — switchable between closed and
+> firm, filterable by office and team. Add a year-over-year view: each agent's
+> GCI from Jan 1 through today against the same period last year, with the
+> dollar change and % change, sortable by % change so I can see who is growing
+> and who is slipping.
 
 **👋 Recruiting and retention watch**
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat or as a local app on my computer (ask
-> me which) — an app that 
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that
 > shows me agents who have gone quiet — no new deal written in 60, 90 or 180
 > days — next to their production over the same period last year, so I can see
 > who is slipping before they leave.
 
 **📇 Agent roster export**
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat or as a local app on my computer (ask
-> me which) — an app that 
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that
 > exports our agent roster to CSV — name, email, phone, office, team, status,
 > start date — filterable to active only and by office, with a column layout I
 > can save. For board dues, E&O renewal and reconciling the MLS roster.
 
 **👯 Duplicate profile check before a merge**
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat or as a local app on my computer (ask
-> me which) — an app that 
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that
 > takes two profile IDs I believe are the same person and pulls the full deal
-> list for each — every page, not just the first. Show which deals appear on
-> both, with deal number, property address, sale status, buyer and seller
-> names, and a link to each deal, so I know what a merge will touch.
+> list for each. Show which deals appear on both, with deal number, property
+> address, sale status, buyer and seller names, so I know what a merge will
+> touch.
 
 **🤝 Co-op and outside brokerage reconciliation**
 
-> Read https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
-> and follow it exactly. If you cannot open that page, stop and tell me.
-> Build it as a prototype in this chat or as a local app on my computer (ask
-> me which) — an app that 
+> Follow https://raw.githubusercontent.com/Loft47/loft-mcp-client/main/build-guide.md
+> (stop if you can't open it). Build an app that
 > lists every deal with an outside brokerage on it: the co-op side, what we owe
 > or are owed, whether the external payout has been transacted, and anything
 > outstanding more than 14 days past close.
