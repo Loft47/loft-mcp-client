@@ -4,7 +4,7 @@
 
 ## Library Overview
 
-Real estate brokerages are like snowflakes—if snowflakes were obsessed with multi-tiered commission splits, hyper-specific transaction pipelines, and proprietary deal structures. Traditional software loves forcing every team into the same rigid box, usually resulting in Frankenstein spreadsheets, manual workarounds, and unnecessary friction just to run daily operations.
+Real estate brokerages are like snowflakes:if snowflakes were obsessed with multi-tiered commission splits, hyper-specific transaction pipelines, and proprietary deal structures. Traditional software loves forcing every team into the same rigid box, usually resulting in Frankenstein spreadsheets, manual workarounds, and unnecessary friction just to run daily operations.
 
 This Loft47 MCP library was built on a simple premise: your software should bend to your operational logic, not the other way around.
 
